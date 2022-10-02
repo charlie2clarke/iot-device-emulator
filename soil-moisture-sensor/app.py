@@ -1,3 +1,4 @@
+import os
 from counterfit_connection import CounterFitConnection
 CounterFitConnection.init('127.0.0.1', 5000)
 
@@ -10,8 +11,10 @@ from counterfit_shims_grove.grove_led import GroveLed
 import json
 from azure.iot.device import IoTHubDeviceClient, Message, MethodResponse
 
-#connection_string = 'HostName=Software-Engineering-2.azure-devices.net;DeviceId=soil-moisture-sensor;SharedAccessKey=EwplZGFABiid0YTmjQaSy3W4qf7XZ3VXznyBaZO4EuU='
-connection_string = 'HostName=ECM3440-Assignment.azure-devices.net;DeviceId=soil-moisture-sensor;SharedAccessKey=LQugzEuDImMNBT1olepKTWAa3GfxX50In00+tFAYcOI='
+connection_string = os.getenv("IOT_CONNECTION_STRING")
+if connection_string is None:
+    raise Exception("IOT_CONNECTION_STRING is not set")
+
 adc = ADC()
 relay = GroveRelay(5)
 
