@@ -1,22 +1,29 @@
+import json
 import os
+from types import SimpleNamespace
+
+import requests
 from counterfit_connection import CounterFitConnection
+
 CounterFitConnection.init('127.0.0.1', 5000)
 
-import time
-from counterfit_shims_grove.adc import ADC
-from counterfit_shims_grove.grove_relay import GroveRelay
-from counterfit_connection import CounterFitConnection
-from counterfit_shims_grove.grove_light_sensor_v1_2 import GroveLightSensor
-from counterfit_shims_grove.grove_led import GroveLed
 import json
-from azure.iot.device import IoTHubDeviceClient, Message, MethodResponse
+import time
+
+from azure.iot.device import IoTHubDeviceClient, Message
+from counterfit_connection import CounterFitConnection
+from counterfit_shims_grove.adc import ADC
+
+ALLOWED_SENSORS = [
+    "Soil Moisture",
+    "Temperature"
+]
 
 connection_string = os.getenv("IOT_CONNECTION_STRING")
 if connection_string is None:
     raise Exception("IOT_CONNECTION_STRING is not set")
 
 adc = ADC()
-relay = GroveRelay(5)
 
 device_client = IoTHubDeviceClient.create_from_connection_string(connection_string)
 
@@ -24,41 +31,79 @@ print('Connecting')
 device_client.connect()
 print('Connected')
 
-def handle_method_request(request):
-    print("Direct method received - ", request.name)
-    
-    if request.name == "relay_on":
-        relay.on()
-    elif request.name == "relay_off":
-        relay.off()
+def _do_counterfit_req(endpoint, payload):
+    url = 'http://localhost:5000{}'.format(endpoint)
 
-    method_response = MethodResponse.create_from_method_request(request, 200)
-    device_client.send_method_response(method_response)
+    payload = json.dumps(payload)
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
 
-device_client.on_method_request_received = handle_method_request
+    return response.status_code
 
-while True:
-    soil_moisture = adc.read(0)
-    temperature = adc.read(1)
-    humidity = adc.read(2)
-    led1 = GroveLed(3)
 
-    print("Soil moisture:", soil_moisture)
-    print("Temperature:", temperature)
-    print("Humidity:", humidity)
+def create_sensor(i, sensor):
+    if sensor.type not in ALLOWED_SENSORS:
+        raise Exception("sensor is not valid")
 
-    message = Message(json.dumps({ 'soil_moisture': soil_moisture }))
-    device_client.send_message(message)
-    message = Message(json.dumps({ 'temperature': temperature }))
-    device_client.send_message(message)
-    message = Message(json.dumps({ 'humidity': humidity }))
-    device_client.send_message(message)
+    payload = {
+        "type": sensor.type,
+        "pin": i,
+        "i2c_pin": i,
+        "port": "/dev/ttyAMA0",
+        "name": "sensor_" + str(i),
+        "unit": sensor.units,
+        "i2c_unit": sensor.units,
+    }
 
-    print('Turning LED on')
-    led1.on()
+    http_code = _do_counterfit_req("/create_sensor", payload)
+    if http_code != 200:
+        raise Exception("unsuccessful request to counterfit with payload: " + payload)
 
-    time.sleep(10)
 
-    print('Turning LED off')
-    led1.off()
+def configure_sensor(i, sensor):
+    if (sensor.min or sensor.max) is None: 
+        raise Exception("no min or max value set for sensor")
+
+    payload = {
+        "port": str(i),
+        "value": i,
+        "is_random": True,
+        "random_min": sensor.min,
+        "random_max": sensor.max
+    }
+
+    http_code = _do_counterfit_req("/integer_sensor_settings", payload)
+    if http_code != 200:
+        raise Exception("unsuccessful request to counterfit with payload: " + payload)
+
+
+def read_sensor_values(sensors):
+    sensor_dict = {}
+
+    while True:
+        for i in range(len(sensors)):
+            sensor = sensors[i]
+            sensor_name = '{}_{}'.format(sensor.type, i)
+            sensor_dict[sensor_name] = adc.read(i)
+            print(sensor_name + " " + str(sensor_dict[sensor_name]))
+
+            json_sensor_name = sensor.type.lower().replace(" ", "_")
+
+            message = Message(json.dumps({ json_sensor_name: sensor_dict[sensor_name] }))
+            device_client.send_message(message)
+
+        time.sleep(10)
+
+
+if __name__ == "__main__":
+    conf_file = open("./config.json", "r")
+    conf = json.load(conf_file, object_hook=lambda d: SimpleNamespace(**d))
+
+    for i, sensor in enumerate(conf):
+        create_sensor(i, sensor)
+        configure_sensor(i, sensor)
+
+    read_sensor_values(conf)
     
