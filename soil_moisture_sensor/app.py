@@ -1,4 +1,5 @@
 import json
+import datetime
 import os
 import time
 from types import SimpleNamespace
@@ -53,7 +54,9 @@ def run() -> None:
 
     while True:
         for i, device in enumerate(iot_devices):
-            device.read_sensor_values(i)
+            # passing in time so that each batch of sensor readings can be grouped to the nearest second.
+            time = datetime.now()
+            device.read_sensor_values(i, time)
         time.sleep(10)
 
 

@@ -63,7 +63,7 @@ class IoTDevice:
                 "unsuccessful request to counterfit with payload: " + payload
             )
 
-    def read_sensor_values(self, i):
+    def read_sensor_values(self, i, time):
         sensor_dict = {}
 
         sensor_name = "{}_{}".format(self.type, i)
@@ -73,10 +73,7 @@ class IoTDevice:
 
         message = Message(
             json.dumps(
-                {
-                    "name": self.type,
-                    "value": sensor_dict[sensor_name],
-                }
+                {"name": self.type, "value": sensor_dict[sensor_name], "time": time}
             )
         )
         self.client.device_client.send_message(message)
