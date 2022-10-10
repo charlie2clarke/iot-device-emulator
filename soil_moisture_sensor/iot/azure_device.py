@@ -68,14 +68,14 @@ class IoTDevice:
 
         sensor_name = "{}_{}".format(self.type, i)
         sensor_dict[sensor_name] = self.client.adc.read(i)
-        print(sensor_name + " " + str(sensor_dict[sensor_name]))
 
-        json_sensor_name = self.type.lower().replace(" ", "_")
+        print(sensor_name + " " + str(sensor_dict[sensor_name]))
 
         message = Message(
             json.dumps(
                 {
-                    json_sensor_name: sensor_dict[sensor_name],
+                    "name": self.type,
+                    "value": sensor_dict[sensor_name],
                 }
             )
         )
