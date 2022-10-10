@@ -16,5 +16,14 @@
         "azure": {
             "device_id": "temperature_sensor"
         }
+    },
+    {
+        "type": "Humidity",
+        "units": "Percent",
+        "min": 0,
+        "max": 100,
+        "azure": {
+            "device_id": "humidity_sensor"
+        }
     }
 ]

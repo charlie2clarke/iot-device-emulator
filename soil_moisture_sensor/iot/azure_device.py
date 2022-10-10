@@ -7,7 +7,7 @@ from .azure_iot_hub import IoTHubClient
 
 
 class IoTDevice:
-    ALLOWED_SENSORS = ["Soil Moisture", "Temperature"]
+    ALLOWED_SENSORS = ["Soil Moisture", "Temperature", "Humidity"]
 
     def __init__(
         self,
