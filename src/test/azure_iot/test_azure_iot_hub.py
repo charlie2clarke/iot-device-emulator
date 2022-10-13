@@ -11,6 +11,10 @@ def httpserver_listen_address():
     return ("127.0.0.1", 5000)
 
 
+def setup_test_server(httpserver: HTTPServer):
+    httpserver.expect_request("/create_sensor").respond_with_data("Success")
+
+
 @mock.patch("src.main.azure_iot.azure_iot_hub.IoTHubClient.create_device_client")
 @mock.patch("src.main.azure_iot.azure_iot_hub.IoTHubDeviceClient")
 def test_post(
@@ -21,7 +25,7 @@ def test_post(
         device_name="device name", connection_str="connection string"
     )
 
-    httpserver.expect_request("/test").respond_with_data("yoo")
+    httpserver.expect_request("/test").respond_with_data("Success")
 
     code = iot_hub_client.post("/test", {"test": "testing testing, one two, one two"})
 

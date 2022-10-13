@@ -1,5 +1,4 @@
 import json
-import time
 
 from azure.iot.device import Message
 
@@ -37,7 +36,7 @@ class IoTDevice:
             )
         return False
 
-    def create_sensor(self, i: int) -> None:
+    def create_sensor(self, i: int) -> bool:
         if self.type not in IoTDevice.ALLOWED_SENSORS:
             raise Exception("sensor is not valid")
 
@@ -54,8 +53,9 @@ class IoTDevice:
         http_code = self.client.post("/create_sensor", payload)
         if http_code != 200:
             raise Exception(
-                "unsuccessful request to counterfit with payload: " + payload
+                "unsuccessful request to counterfit with payload: " + str(payload)
             )
+        return True
 
     def configure_sensor(self, i: int) -> None:
         if (self.min or self.max) is None:

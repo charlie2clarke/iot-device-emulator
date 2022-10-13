@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import requests
 from azure.iot.device import IoTHubDeviceClient, MethodResponse
 from counterfit_shims_grove.adc import ADC
