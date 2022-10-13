@@ -26,3 +26,35 @@ def test_post(
     code = iot_hub_client.post("/test", {"test": "testing testing, one two, one two"})
 
     assert code == 200
+
+
+@mock.patch(
+    "src.main.azure_iot.azure_iot_hub.IoTHubDeviceClient.create_from_connection_string"
+)
+def test_create_device_client(mock_create_from_connection_string):
+    iot_hub_client = IoTHubClient(
+        device_name="device name", connection_str="connection string"
+    )
+
+    iot_hub_client.create_device_client()
+
+    assert mock_create_from_connection_string.call_count == 2
+
+
+@mock.patch(
+    "src.main.azure_iot.azure_iot_hub.IoTHubClient.create_device_client",
+)
+@mock.patch(
+    "src.main.azure_iot.azure_iot_hub.MethodResponse.create_from_method_request"
+)
+@mock.patch("src.main.azure_iot.azure_iot_hub.IoTHubDeviceClient.send_method_response")
+def test_set_request_handler(
+    mock_create_device_client,
+    mock_create_from_method_request,
+    mock_send_method_response,
+):
+    iot_hub_client = IoTHubClient(
+        device_name="device name", connection_str="connection string"
+    )
+
+    assert mock_send_method_response.call_count == 1
