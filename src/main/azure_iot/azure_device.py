@@ -57,7 +57,7 @@ class IoTDevice:
             )
         return True
 
-    def configure_sensor(self, i: int) -> None:
+    def configure_sensor(self, i: int) -> bool:
         if (self.min or self.max) is None:
             raise Exception("no min or max value set for sensor")
 
@@ -72,10 +72,11 @@ class IoTDevice:
         http_code = self.client.post("/integer_sensor_settings", payload)
         if http_code != 200:
             raise Exception(
-                "unsuccessful request to counterfit with payload: " + payload
+                "unsuccessful request to counterfit with payload: " + str(payload)
             )
+        return True
 
-    def read_sensor_values(self, i, time):
+    def read_sensor_values(self, i, time) -> dict:
         sensor_dict = {}
 
         sensor_name = "{}_{}".format(self.type, i)
@@ -83,9 +84,14 @@ class IoTDevice:
 
         print(sensor_name + " " + str(sensor_dict[sensor_name]))
 
-        message = Message(
-            json.dumps(
-                {"name": self.type, "value": sensor_dict[sensor_name], "time": time}
-            )
-        )
-        self.client.device_client.send_message(message)
+        sensor_values = {
+            "name": self.type,
+            "value": sensor_dict[sensor_name],
+            "time": time,
+        }
+        message = Message(json.dumps(sensor_values))
+        try:
+            self.client.device_client.send_message(message)
+        except Exception as e:
+            raise Exception("unable to send message: " + str(e))
+        return sensor_values
