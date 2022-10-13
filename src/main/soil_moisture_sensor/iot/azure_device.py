@@ -25,6 +25,18 @@ class IoTDevice:
         self.device_id = device_id
         self.client = client
 
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (
+                self.type == other.type
+                and self.units == other.units
+                and self.min == other.min
+                and self.max == other.max
+                and self.device_id == other.device_id
+                and self.client == other.client
+            )
+        return False
+
     def create_sensor(self, i: int) -> None:
         if self.type not in IoTDevice.ALLOWED_SENSORS:
             raise Exception("sensor is not valid")

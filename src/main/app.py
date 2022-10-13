@@ -5,12 +5,19 @@ import time
 from types import SimpleNamespace
 
 from counterfit_connection import CounterFitConnection
-from iot.azure_device import IoTDevice
-from iot.azure_iot_hub import IoTHubClient
+from .soil_moisture_sensor.iot.azure_device import IoTDevice
+from .soil_moisture_sensor.iot.azure_iot_hub import IoTHubClient
 from typing import Any
 
 
 def initialise_device(sensor: Any, connection_str: str, i: int) -> IoTDevice:
+    if sensor.type == "":
+        if sensor.units == "":
+            raise Exception("not all sensor details have been provided")
+
+    if connection_str == "":
+        raise Exception("connection_str cannot be empty")
+
     iot_hub = IoTHubClient(
         sensor.type,
         connection_str,

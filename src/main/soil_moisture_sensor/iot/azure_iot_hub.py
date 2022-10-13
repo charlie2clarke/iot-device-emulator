@@ -23,7 +23,16 @@ class IoTHubClient:
 
         self.device_client.connect()
         self.device_client.on_method_request_received = self.set_request_handler
-        print("connected to " + device_name)
+
+        print("connected to " + self.device_name)
+
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (
+                self.device_name == other.device_name
+                and self.connection_str == other.connection_str
+            )
+        return False
 
     def set_request_handler(self, request):
         print("Direct method received - ", request.name)
