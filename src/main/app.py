@@ -5,8 +5,8 @@ import time
 from types import SimpleNamespace
 
 from counterfit_connection import CounterFitConnection
-from .soil_moisture_sensor.iot.azure_device import IoTDevice
-from .soil_moisture_sensor.iot.azure_iot_hub import IoTHubClient
+from .azure_iot.azure_device import IoTDevice
+from .azure_iot.azure_iot_hub import IoTHubClient
 from typing import Any
 
 

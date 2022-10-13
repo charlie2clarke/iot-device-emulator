@@ -5,17 +5,17 @@ from typing import Any, List
 
 import mock
 from src.main.app import initialise_device
-from src.main.soil_moisture_sensor.iot.azure_device import IoTDevice
-from src.main.soil_moisture_sensor.iot.azure_iot_hub import IoTHubClient
+from src.main.azure_iot.azure_device import IoTDevice
+from src.main.azure_iot.azure_iot_hub import IoTHubClient
 
 
-@mock.patch("src.main.soil_moisture_sensor.iot.azure_device.IoTDevice.create_sensor")
-@mock.patch("src.main.soil_moisture_sensor.iot.azure_device.IoTDevice.configure_sensor")
-@mock.patch("src.main.soil_moisture_sensor.iot.azure_iot_hub.ADC")
+@mock.patch("src.main.azure_iot.azure_device.IoTDevice.create_sensor")
+@mock.patch("src.main.azure_iot.azure_device.IoTDevice.configure_sensor")
+@mock.patch("src.main.azure_iot.azure_iot_hub.ADC")
 @mock.patch(
-    "src.main.soil_moisture_sensor.iot.azure_iot_hub.IoTHubClient.create_device_client",
+    "src.main.azure_iot.azure_iot_hub.IoTHubClient.create_device_client",
 )
-@mock.patch("src.main.soil_moisture_sensor.iot.azure_iot_hub.IoTHubDeviceClient")
+@mock.patch("src.main.azure_iot.azure_iot_hub.IoTHubDeviceClient")
 def test_initialise_device(
     mock_create_sensor,
     mock_configure_sensor,
