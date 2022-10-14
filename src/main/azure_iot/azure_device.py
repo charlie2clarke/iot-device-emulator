@@ -1,5 +1,4 @@
 import json
-import time
 
 from azure.iot.device import Message
 
@@ -25,7 +24,19 @@ class IoTDevice:
         self.device_id = device_id
         self.client = client
 
-    def create_sensor(self, i: int) -> None:
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (
+                self.type == other.type
+                and self.units == other.units
+                and self.min == other.min
+                and self.max == other.max
+                and self.device_id == other.device_id
+                and self.client == other.client
+            )
+        return False
+
+    def create_sensor(self, i: int) -> bool:
         if self.type not in IoTDevice.ALLOWED_SENSORS:
             raise Exception("sensor is not valid")
 
@@ -42,10 +53,11 @@ class IoTDevice:
         http_code = self.client.post("/create_sensor", payload)
         if http_code != 200:
             raise Exception(
-                "unsuccessful request to counterfit with payload: " + payload
+                "unsuccessful request to counterfit with payload: " + str(payload)
             )
+        return True
 
-    def configure_sensor(self, i: int) -> None:
+    def configure_sensor(self, i: int) -> bool:
         if (self.min or self.max) is None:
             raise Exception("no min or max value set for sensor")
 
@@ -60,10 +72,11 @@ class IoTDevice:
         http_code = self.client.post("/integer_sensor_settings", payload)
         if http_code != 200:
             raise Exception(
-                "unsuccessful request to counterfit with payload: " + payload
+                "unsuccessful request to counterfit with payload: " + str(payload)
             )
+        return True
 
-    def read_sensor_values(self, i, time):
+    def read_sensor_values(self, i, time) -> dict:
         sensor_dict = {}
 
         sensor_name = "{}_{}".format(self.type, i)
@@ -71,9 +84,14 @@ class IoTDevice:
 
         print(sensor_name + " " + str(sensor_dict[sensor_name]))
 
-        message = Message(
-            json.dumps(
-                {"name": self.type, "value": sensor_dict[sensor_name], "time": time}
-            )
-        )
-        self.client.device_client.send_message(message)
+        sensor_values = {
+            "name": self.type,
+            "value": sensor_dict[sensor_name],
+            "time": time,
+        }
+        message = Message(json.dumps(sensor_values))
+        try:
+            self.client.device_client.send_message(message)
+        except Exception as e:
+            raise Exception("unable to send message: " + str(e))
+        return sensor_values
