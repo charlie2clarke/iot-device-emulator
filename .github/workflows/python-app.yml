@@ -50,6 +50,7 @@ jobs:
           pip install pytest
           pip install pytest-cov
           pip install mock
+          pip install pytest-httpserver
           python -m pytest --junitxml=test-results-${{ github.sha }}.xml --exitfirst --verbose --failed-first --cov=. --cov-report xml
 
       - name: Upload pytest test results
