@@ -1,8 +1,9 @@
 import json
 import os
+from typing import Dict
 
 import requests
-from azure.iot.device import IoTHubDeviceClient, MethodResponse
+from azure.iot.device import IoTHubDeviceClient, Message, MethodResponse
 from counterfit_shims_grove.adc import ADC
 
 
@@ -52,3 +53,7 @@ class IoTHubClient:
         response = requests.request("POST", url, headers=headers, data=payload)
 
         return response.status_code
+
+    def publish_message(self, msg: Dict) -> None:
+        message = Message(json.dumps(msg))
+        self.device_client.send_message(message)
