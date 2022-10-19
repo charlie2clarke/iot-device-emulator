@@ -51,18 +51,4 @@ jobs:
           pip install pytest-cov
           pip install mock
           pip install pytest-httpserver
-          python -m pytest --junitxml=test-results-${{ github.sha }}.xml --exitfirst --verbose --failed-first --cov=. --cov-report xml tests/ | tee pytest-coverage.txt
-
-      - name: Upload pytest test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: pytest-results-${{ github.sha }}
-          path: test-results-${{ github.sha }}.xml
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
-
-      - name: Pytest coverage comment
-        uses: MishaKav/pytest-coverage-comment@main
-        with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./test-results-${{ github.sha }}.xml
+          python -m pytest --cov=. --exitfirst --verbose --failed-first --cov-report=xml coverage report --fail-under=80
