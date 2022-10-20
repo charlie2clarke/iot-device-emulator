@@ -5,13 +5,19 @@ import os
 from types import SimpleNamespace
 
 from counterfit_connection import CounterFitConnection
-from azure_iot.azure_device import IoTDevice
-from azure_iot.azure_iot_hub import IoTHubClient
-from azure_iot.azure_actuator import IoTActuator
+from .azure_iot.azure_device import IoTDevice
+from .azure_iot.azure_iot_hub import IoTHubClient
+from .azure_iot.azure_actuator import IoTActuator
 from typing import Any
 
 
 def initialise_hub(sensor_type: str, connection_str: str) -> IoTHubClient:
+    if sensor_type == "":
+        raise Exception("sensor_type cannot be empty")
+
+    if connection_str == "":
+        raise Exception("connection_str cannot be empty")
+
     return IoTHubClient(
         sensor_type,
         connection_str,
@@ -19,6 +25,9 @@ def initialise_hub(sensor_type: str, connection_str: str) -> IoTHubClient:
 
 
 def initialise_actuator(sensor: Any, iot_hub: IoTHubClient, pin: int) -> IoTActuator:
+    if (sensor or iot_hub or pin) is None:
+        raise Exception("not all actuator details have been provided")
+
     iot_actuator = IoTActuator(
         sensor.actuator.type,
         sensor.actuator.value_triggered_at,
@@ -26,6 +35,7 @@ def initialise_actuator(sensor: Any, iot_hub: IoTHubClient, pin: int) -> IoTActu
         sensor.type,
         iot_hub,
     )
+
     iot_actuator.create_actuator()
 
     iot_actuator.configure_actuator()
@@ -39,6 +49,10 @@ def initialise_device(
     sensor_pin: int,
     iot_actuator: IoTActuator,
 ) -> IoTDevice:
+    if sensor.type == "":
+        if sensor.units == "":
+            raise Exception("not all sensor details have been provided")
+
     iot_device = IoTDevice(
         sensor.type,
         sensor.units,
