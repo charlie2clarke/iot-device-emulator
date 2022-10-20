@@ -1,7 +1,6 @@
-import json
+from datetime import datetime
 
-from azure.iot.device import Message
-
+from .azure_actuator import IoTActuator
 from .azure_iot_hub import IoTHubClient
 
 
@@ -16,6 +15,7 @@ class IoTDevice:
         max: int,
         device_id: str,
         client: IoTHubClient,
+        actuator: IoTActuator,
     ) -> None:
         self.type = type
         self.units = units
@@ -23,6 +23,7 @@ class IoTDevice:
         self.max = max
         self.device_id = device_id
         self.client = client
+        self.actuator = actuator
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
@@ -76,22 +77,28 @@ class IoTDevice:
             )
         return True
 
-    def read_sensor_values(self, i, time) -> dict:
+    def read_sensor_values(self, i) -> dict:
         sensor_dict = {}
 
         sensor_name = "{}_{}".format(self.type, i)
-        sensor_dict[sensor_name] = self.client.adc.read(i)
+        value = self.client.adc.read(i)
+
+        if value <= self.actuator.value_triggered_at:
+            print("{} actuator trigger".format(str(self.actuator.sensor_type)))
+
+            actuator_msg = {
+                "name": self.actuator.type,
+                "sensor_type": self.actuator.sensor_type,
+                "time": datetime.now().isoformat(),
+            }
+
+            self.actuator.client.publish_message(actuator_msg)
+
+        sensor_dict[sensor_name] = value
 
         print(sensor_name + " " + str(sensor_dict[sensor_name]))
 
-        sensor_values = {
+        return {
             "name": self.type,
             "value": sensor_dict[sensor_name],
-            "time": time,
         }
-        message = Message(json.dumps(sensor_values))
-        try:
-            self.client.device_client.send_message(message)
-        except Exception as e:
-            raise Exception("unable to send message: " + str(e))
-        return sensor_values
