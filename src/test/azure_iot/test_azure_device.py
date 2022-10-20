@@ -1,10 +1,10 @@
-import json
-import mock
-from azure.iot.device import Message
-import pytest
 from dataclasses import dataclass
-from typing import List, Any
+from typing import Any, List
 
+import mock
+import pytest
+from azure.iot.device import Message
+from src.main.azure_iot.azure_actuator import IoTActuator
 from src.main.azure_iot.azure_device import IoTDevice
 from src.main.azure_iot.azure_iot_hub import IoTHubClient
 
@@ -37,6 +37,15 @@ def test_create_sensor(
                 device_id="testId",
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
+                ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
                 ),
             ),
             args=[
@@ -87,6 +96,15 @@ def test_create_sensor(
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
                 ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
+                ),
             ),
             args=[1],
             want=None,
@@ -103,6 +121,15 @@ def test_create_sensor(
                 device_id="testId",
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
+                ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
                 ),
             ),
             args=[1],
@@ -151,6 +178,15 @@ def test_configure_sensor(
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
                 ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
+                ),
             ),
             args=[1],
             want=True,
@@ -198,6 +234,15 @@ def test_create_sensor(
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
                 ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
+                ),
             ),
             args=[1],
             want=None,
@@ -214,6 +259,15 @@ def test_create_sensor(
                 device_id="testId",
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
+                ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
                 ),
             ),
             args=[1],
@@ -262,6 +316,15 @@ def test_configure_sensor(
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
                 ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
+                ),
             ),
             args=[1],
             want=None,
@@ -278,6 +341,15 @@ def test_configure_sensor(
                 device_id="testId",
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
+                ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
                 ),
             ),
             args=[1],
@@ -325,12 +397,20 @@ def test_read_sensor_value(
                 client=IoTHubClient(
                     device_name="testName", connection_str="testConnectionStr"
                 ),
+                actuator=IoTActuator(
+                    type="LED",
+                    value_triggered_at=10,
+                    pin=1,
+                    sensor_type="Soil Moisture",
+                    client=IoTHubClient(
+                        device_name="testName", connection_str="testConnectionStr"
+                    ),
+                ),
             ),
-            args=[1, "2022-05-18T12:19:51.685496"],
+            args=[1],
             want={
                 "name": "Soil Moisture",
                 "value": 999,
-                "time": "2022-05-18T12:19:51.685496",
             },
             raises_exception=False,
             exception_info=None,
