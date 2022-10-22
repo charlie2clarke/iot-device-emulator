@@ -1,27 +1,29 @@
+import argparse
 import json
-from datetime import datetime
-import time
+import logging
 import os
+import time
+from datetime import datetime
 from types import SimpleNamespace
-
-from counterfit_connection import CounterFitConnection
-from .azure_iot.azure_device import IoTDevice
-from .azure_iot.azure_iot_hub import IoTHubClient
-from .azure_iot.azure_actuator import IoTActuator
 from typing import Any
 
+from counterfit_connection import CounterFitConnection
 
-def initialise_hub(sensor_type: str, connection_str: str) -> IoTHubClient:
+from .azure_iot.azure_actuator import IoTActuator
+from .azure_iot.azure_device import IoTDevice
+from .azure_iot.azure_iot_hub import IoTHubClient
+
+
+def initialise_hub(
+    sensor_type: str, connection_str: str, counterfit_base_url
+) -> IoTHubClient:
     if sensor_type == "":
         raise Exception("sensor_type cannot be empty")
 
     if connection_str == "":
         raise Exception("connection_str cannot be empty")
 
-    return IoTHubClient(
-        sensor_type,
-        connection_str,
-    )
+    return IoTHubClient(sensor_type, connection_str, counterfit_base_url)
 
 
 def initialise_actuator(sensor: Any, iot_hub: IoTHubClient, pin: int) -> IoTActuator:
@@ -73,7 +75,24 @@ def initialise_device(
 def run() -> None:
     iot_devices = []
 
-    CounterFitConnection.init("127.0.0.1", 5000)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--counterfit",
+        nargs=1,
+        help="--counterfit = base url of counterfit to connect to",
+        default=["127.0.0.1"],
+        type=str,
+    )
+    args = parser.parse_args()
+
+    if "counterfit" not in args:
+        raise Exception("profile flag must be set")
+
+    parsed_base_url = args.counterfit.pop()
+
+    logging.basicConfig(level=logging.INFO)
+
+    CounterFitConnection.init(parsed_base_url, 5000)
 
     conf_file = open("./config.json", "r")
     conf = json.load(conf_file, object_hook=lambda d: SimpleNamespace(**d))
@@ -96,8 +115,10 @@ def run() -> None:
                 "no connection string found with the name: " + actuator_conn_str_env_var
             )
 
-        sensor_hub = initialise_hub(sensor.type, sensor_conn_str)
-        actuator_hub = initialise_hub(sensor.actuator.type, actuator_conn_str)
+        sensor_hub = initialise_hub(sensor.type, sensor_conn_str, parsed_base_url)
+        actuator_hub = initialise_hub(
+            sensor.actuator.type, actuator_conn_str, parsed_base_url
+        )
         actuator = initialise_actuator(sensor, actuator_hub, i + 20)
         sensor_device = initialise_device(sensor, sensor_hub, i, actuator)
 

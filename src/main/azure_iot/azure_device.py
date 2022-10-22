@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from .azure_actuator import IoTActuator
@@ -84,7 +85,7 @@ class IoTDevice:
         value = self.client.adc.read(i)
 
         if value <= self.actuator.value_triggered_at:
-            print("{} actuator trigger".format(str(self.actuator.sensor_type)))
+            logging.info("{} actuator trigger".format(str(self.actuator.sensor_type)))
 
             actuator_msg = {
                 "name": self.actuator.type,
@@ -96,7 +97,7 @@ class IoTDevice:
 
         sensor_dict[sensor_name] = value
 
-        print(sensor_name + " " + str(sensor_dict[sensor_name]))
+        logging.info(sensor_name + " " + str(sensor_dict[sensor_name]))
 
         return {
             "name": self.type,

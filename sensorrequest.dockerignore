@@ -1,0 +1,5 @@
+.github
+.coveragerc
+pytest.ini
+README.md
+src/test

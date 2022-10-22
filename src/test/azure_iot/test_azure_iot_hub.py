@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 import mock
 import pytest
 from pytest_httpserver import HTTPServer
@@ -22,7 +20,9 @@ def test_post(
 ):
     # check that the server is called with the correct request
     iot_hub_client = IoTHubClient(
-        device_name="device name", connection_str="connection string"
+        device_name="device name",
+        connection_str="myconnectionstring",
+        counterfit_base_url="127.0.0.1",
     )
 
     httpserver.expect_request("/test").respond_with_data("Success")
@@ -37,7 +37,9 @@ def test_post(
 )
 def test_create_device_client(mock_create_from_connection_string):
     iot_hub_client = IoTHubClient(
-        device_name="device name", connection_str="connection string"
+        device_name="device name",
+        connection_str="myconnectionstring",
+        counterfit_base_url="127.0.0.1",
     )
 
     iot_hub_client.create_device_client()
@@ -58,7 +60,9 @@ def test_set_request_handler(
     mock_send_method_response,
 ):
     iot_hub_client = IoTHubClient(
-        device_name="device name", connection_str="connection string"
+        device_name="device name",
+        connection_str="myconnectionstring",
+        counterfit_base_url="127.0.0.1",
     )
 
     assert mock_send_method_response.call_count == 1

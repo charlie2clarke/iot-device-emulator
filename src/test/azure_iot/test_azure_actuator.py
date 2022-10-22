@@ -32,7 +32,9 @@ def test_create_actuator(
                 pin=1,
                 sensor_type="Soil Moisture",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
             ),
             want=True,
@@ -76,7 +78,9 @@ def test_configure_sensor(
                 pin=1,
                 sensor_type="Soil Moisture",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
             ),
             want=True,
