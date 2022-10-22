@@ -11,5 +11,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Generate Tag
+        id: generate_tag
+        uses: anothrNick/github-tag-action@1.52.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.ECM3440_GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch
+          DRY_RUN: true
+
+      - name: Build image
+        run: |
+          docker compose -f "docker-compose.yml" build
+
+          docker tag sensorrequest sensorrequest:${{ steps.generate_tag.outputs.new_tag }}
+
+      - name: Upload image
+        uses: ishworkh/docker-image-artifact-upload@v1
+        with:
+          image: "sensorrequest:${{ steps.generate_tag.outputs.new_tag }}"
+
       - name: Release
         uses: softprops/action-gh-release@v1
+        with:
+          files: action_image_artifact_sensorrequest_${{ steps.generate_tag.outputs.new_tag }}

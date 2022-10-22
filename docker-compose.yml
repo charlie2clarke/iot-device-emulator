@@ -6,6 +6,7 @@ networks:
 
 services:
   sensorrequest:
+    image: sensorrequest
     build:
       context: .
       dockerfile: ./sensorrequest.Dockerfile
@@ -16,6 +17,7 @@ services:
       - iot-devices
 
   counterfit:
+    image: ""
     build:
       context: .
       dockerfile: ./counterfit.Dockerfile
