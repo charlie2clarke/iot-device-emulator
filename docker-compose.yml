@@ -1,0 +1,29 @@
+version: '2.1'
+
+networks:
+  iot-devices:
+    driver: bridge
+
+services:
+  sensorrequest:
+    image: sensorrequest
+    build:
+      context: .
+      dockerfile: ./sensorrequest.Dockerfile
+    depends_on:
+      counterfit:
+        condition: service_started
+    networks:
+      - iot-devices
+
+  counterfit:
+    image: ""
+    build:
+      context: .
+      dockerfile: ./counterfit.Dockerfile
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    networks:
+      - iot-devices

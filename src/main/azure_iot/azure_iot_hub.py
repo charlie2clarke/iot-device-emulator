@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from typing import Dict
 
@@ -9,24 +10,23 @@ from counterfit_shims_grove.adc import ADC
 
 class IoTHubClient:
     def __init__(
-        self,
-        device_name: str,
-        connection_str: str,
+        self, device_name: str, connection_str: str, counterfit_base_url: str
     ) -> None:
         self.device_name = device_name
         self.adc = ADC()
         self.connection_str = connection_str
+        self.counterfit_base_url = counterfit_base_url
         try:
             self.device_client = self.create_device_client()
         except Exception as e:
-            print("couldn't create device_client")
-            print(e)
+            logging.error("couldn't create device_client")
+            logging.error(e)
             os._exit(502)
 
         self.device_client.connect()
         self.device_client.on_method_request_received = self.set_request_handler
 
-        print("connected to " + self.device_name)
+        logging.info("connected to " + self.device_name)
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
@@ -37,7 +37,7 @@ class IoTHubClient:
         return False
 
     def set_request_handler(self, request):
-        print("Direct method received - ", request.name)
+        logging.info("Direct method received - ", request.name)
 
         method_response = MethodResponse.create_from_method_request(request, 200)
         self.device_client.send_method_response(method_response)
@@ -46,7 +46,7 @@ class IoTHubClient:
         return IoTHubDeviceClient.create_from_connection_string(self.connection_str)
 
     def post(self, endpoint, payload) -> int:
-        url = "http://localhost:5000{}".format(endpoint)
+        url = "http://{}:5000{}".format(self.counterfit_base_url, endpoint)
 
         payload = json.dumps(payload)
         headers = {"Content-Type": "application/json"}

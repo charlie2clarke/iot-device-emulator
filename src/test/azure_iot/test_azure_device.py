@@ -36,7 +36,9 @@ def test_create_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -44,7 +46,9 @@ def test_create_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -94,7 +98,9 @@ def test_create_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -102,7 +108,9 @@ def test_create_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -120,7 +128,9 @@ def test_create_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -128,7 +138,9 @@ def test_create_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -176,7 +188,9 @@ def test_configure_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -184,7 +198,9 @@ def test_configure_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -232,7 +248,9 @@ def test_create_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -240,7 +258,9 @@ def test_create_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -258,7 +278,9 @@ def test_create_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -266,7 +288,9 @@ def test_create_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -314,7 +338,9 @@ def test_configure_sensor(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -322,7 +348,9 @@ def test_configure_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -340,7 +368,9 @@ def test_configure_sensor(
                 max=None,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -348,7 +378,9 @@ def test_configure_sensor(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -395,7 +427,9 @@ def test_read_sensor_value(
                 max=2,
                 device_id="testId",
                 client=IoTHubClient(
-                    device_name="testName", connection_str="testConnectionStr"
+                    device_name="testName",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="LED",
@@ -403,7 +437,9 @@ def test_read_sensor_value(
                     pin=1,
                     sensor_type="Soil Moisture",
                     client=IoTHubClient(
-                        device_name="testName", connection_str="testConnectionStr"
+                        device_name="testName",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),

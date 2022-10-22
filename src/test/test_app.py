@@ -44,7 +44,9 @@ def test_initialise_device(
                     azure=SimpleNamespace(device_id="soil_moisture_sensor"),
                 ),
                 IoTHubClient(
-                    device_name="Soil Moisture", connection_str="myconnectionstring"
+                    device_name="Soil Moisture",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 1,
                 IoTActuator(
@@ -53,7 +55,9 @@ def test_initialise_device(
                     pin=10,
                     sensor_type="testSensorType",
                     client=IoTHubClient(
-                        device_name="Soil Moisture", connection_str="myconnectionstring"
+                        device_name="Soil Moisture",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ],
@@ -64,7 +68,9 @@ def test_initialise_device(
                 max=1023,
                 device_id="soil_moisture_sensor",
                 client=IoTHubClient(
-                    device_name="Soil Moisture", connection_str="myconnectionstring"
+                    device_name="Soil Moisture",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 actuator=IoTActuator(
                     type="testType",
@@ -72,7 +78,9 @@ def test_initialise_device(
                     pin=10,
                     sensor_type="testSensorType",
                     client=IoTHubClient(
-                        device_name="Soil Moisture", connection_str="myconnectionstring"
+                        device_name="Soil Moisture",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ),
@@ -90,7 +98,9 @@ def test_initialise_device(
                     azure=SimpleNamespace(device_id="soil_moisture_sensor"),
                 ),
                 IoTHubClient(
-                    device_name="Soil Moisture", connection_str="myconnectionstring"
+                    device_name="Soil Moisture",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 1,
                 IoTActuator(
@@ -99,7 +109,9 @@ def test_initialise_device(
                     pin=10,
                     sensor_type="testSensorType",
                     client=IoTHubClient(
-                        device_name="Soil Moisture", connection_str="myconnectionstring"
+                        device_name="Soil Moisture",
+                        connection_str="myconnectionstring",
+                        counterfit_base_url="127.0.0.1",
                     ),
                 ),
             ],
@@ -144,27 +156,33 @@ def test_initialise_hub(
     test_cases = [
         TestCase(
             name="intialises hub",
-            args=["Soil Moisture", "myconnectionstring"],
+            args=["Soil Moisture", "myconnectionstring", "127.0.0.1"],
             want=IoTHubClient(
-                device_name="Soil Moisture", connection_str="myconnectionstring"
+                device_name="Soil Moisture",
+                connection_str="myconnectionstring",
+                counterfit_base_url="127.0.0.1",
             ),
             raises_exception=False,
             exception_info="",
         ),
         TestCase(
             name="handles case when no sensor_type is provided",
-            args=["", "something"],
+            args=["", "something", "127.0.0.1"],
             want=IoTHubClient(
-                device_name="Soil Moisture", connection_str="myconnectionstring"
+                device_name="Soil Moisture",
+                connection_str="myconnectionstring",
+                counterfit_base_url="127.0.0.1",
             ),
             raises_exception=True,
             exception_info="sensor_type cannot be empty",
         ),
         TestCase(
             name="handles case when no connection_str is provided",
-            args=["something", ""],
+            args=["something", "", "127.0.0.1"],
             want=IoTHubClient(
-                device_name="Soil Moisture", connection_str="myconnectionstring"
+                device_name="Soil Moisture",
+                connection_str="myconnectionstring",
+                counterfit_base_url="127.0.0.1",
             ),
             raises_exception=True,
             exception_info="connection_str cannot be empty",
@@ -216,7 +234,9 @@ def test_initialise_actuator(
                     actuator=SimpleNamespace(type="LED", value_triggered_at=10),
                 ),
                 IoTHubClient(
-                    device_name="Soil Moisture", connection_str="myconnectionstring"
+                    device_name="Soil Moisture",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
                 1,
             ],
@@ -226,7 +246,9 @@ def test_initialise_actuator(
                 pin=1,
                 sensor_type="Soil Moisture",
                 client=IoTHubClient(
-                    device_name="Soil Moisture", connection_str="myconnectionstring"
+                    device_name="Soil Moisture",
+                    connection_str="myconnectionstring",
+                    counterfit_base_url="127.0.0.1",
                 ),
             ),
             raises_exception=False,
