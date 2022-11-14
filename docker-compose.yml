@@ -6,7 +6,7 @@ networks:
 
 services:
   sensorrequest:
-    image: sensorrequest:v0.2.0
+    image: sensorrequest:${SENSORREQUEST_IMAGE_TAG}
     build:
       context: .
       dockerfile: ./sensorrequest.Dockerfile
@@ -17,7 +17,7 @@ services:
       - iot-devices
 
   counterfit:
-    image: counterfit:v0.1.4.dev6
+    image: counterfit:${COUNTERFIT_IMAGE_TAG}
     build:
       context: .
       dockerfile: ./counterfit.Dockerfile
@@ -27,3 +27,4 @@ services:
       - "5000"
     networks:
       - iot-devices
+
